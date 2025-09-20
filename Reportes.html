@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes | StockPro ✨</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            
+            --primary: #3b82f6;
+            --primary-light: #60a5fa;
+            --primary-dark: #1d4ed8;
+            
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            
+            --glow-primary: 0 0 20px rgba(59, 130, 246, 0.3);
+            --glow-secondary: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 30%, var(--gray-50) 100%);
+            color: var(--gray-900);
+            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            background-image: 
+                radial-gradient(circle at 20px 20px, var(--primary) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: var(--white);
+            border-right: 1px solid var(--gray-200);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: var(--shadow-xl);
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: white;
+            box-shadow: var(--shadow-lg), var(--glow-primary);
+        }
+
+        .logo-text {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            border-radius: 16px;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav .active a {
+            color: var(--white);
+            transform: translateX(8px) scale(1.02);
+            box-shadow: var(--shadow-lg), var(--glow-primary);
+        }
+
+        .sidebar-nav a:hover::before,
+        .sidebar-nav .active a::before {
+            opacity: 1;
+        }
+
+        .sidebar-nav i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            z-index: 1;
+            position: relative;
+        }
+
+        .sidebar-nav span {
+            z-index: 1;
+            position: relative;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background: var(--gray-50);
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .page-title h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-title i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .actions-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: var(--shadow-md);
+            font-size: 0.95rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: var(--shadow-xl), var(--glow-primary);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-200);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), var(--accent));
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: var(--shadow-xl), 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .report-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 24px;
+            padding: 2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .report-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: left;
+        }
+
+        .report-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-2xl);
+            border-color: var(--gray-300);
+        }
+
+        .report-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .report-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .report-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .report-icon.primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .report-icon.warning {
+            background: linear-gradient(135deg, var(--warning), #fb923c);
+        }
+
+        .report-icon.success {
+            background: linear-gradient(135deg, var(--success), var(--accent));
+        }
+
+        .report-icon.danger {
+            background: linear-gradient(135deg, var(--danger), #f87171);
+        }
+
+        .report-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .report-description {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .report-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: 12px;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .report-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .report-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .report-btn.primary:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .report-btn.secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .report-btn.secondary:hover {
+            background: var(--gray-200);
+            transform: scale(1.05);
+        }
+
+        .table-section {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .table-container {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--gray-50);
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        td {
+            padding: 1.25rem 1.5rem;
+            color: var(--gray-600);
+            font-weight: 500;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        tbody tr {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        tbody tr:hover {
+            background: var(--gray-50);
+            transform: scale(1.005);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .product-code {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--primary);
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .quantity {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .quantity.low {
+            color: var(--warning);
+        }
+
+        .quantity.zero {
+            color: var(--danger);
+        }
+
+        .quantity.normal {
+            color: var(--success);
+        }
+
+        .cost {
+            color: var(--success);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .status-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .status-critical {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .status-critical::before {
+            background: var(--danger);
+        }
+
+        .status-low {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .status-low::before {
+            background: var(--warning);
+        }
+
+        .status-normal {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .status-normal::before {
+            background: var(--success);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -300px;
+                height: 100vh;
+                z-index: 150;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.active {
+                left: 0;
+                box-shadow: var(--shadow-2xl);
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .actions-section {
+                flex-direction: column;
+            }
+
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 700px;
+            }
+       .report-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.report-card canvas {
+  width: 100% !important;
+  height: 260px !important; /* gráficas más grandes */
+  margin-bottom: 1rem;
+}
+
+.report-actions {
+  margin-top: auto; /* manda botones al final */
+  display: flex;
+  justify-content: space-between;
+}
+
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .report-card canvas {
+    height: 180px !important;
+  }
+}
+
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="logo-text">Reportes</div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="dashboard.html"><i class="fas fa-home"></i><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-box"></i><span>Productos</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-arrow-down"></i><span>Entradas</span></a>
+                    </li>
+                    <li>
+                        <a href="salidas.html"><i class="fas fa-arrow-up"></i><span>Salidas</span></a>
+                    </li>
+                    <li class="active">
+                        <a href="Reportes.html"><i class="fas fa-chart-line"></i><span>Reportes</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-users"></i><span>Proveedores</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-cog"></i><span>Configuración</span></a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="page-title">
+                    <i class="fas fa-chart-line"></i>
+                    <h1>Reportes y Análisis</h1>
+                </div>
+            </header>
+
+            <section class="actions-section">
+                <button class="action-btn btn-primary">
+                    <i class="fas fa-chart-bar"></i>
+                    Generar Reporte Personalizado
+                </button>
+                <button class="action-btn btn-success">
+                    <i class="fas fa-download"></i>
+                    Exportar Todo a Excel
+                </button>
+                <button class="action-btn btn-secondary">
+                    <i class="fas fa-calendar-alt"></i>
+                    Programar Reporte
+                </button>
+                <button class="action-btn btn-secondary">
+                    <i class="fas fa-envelope"></i>
+                    Enviar por Email
+                </button>
+            </section>
+
+     <div class="reports-grid">
+  <!-- Productos Críticos -->
+  <div class="report-card">
+    <div class="report-header">
+      <div class="report-icon danger"><i class="fas fa-exclamation-triangle"></i></div>
+      <h3 class="report-title">Productos Críticos</h3>
+    </div>
+    <p class="report-description">Productos con stock agotado o en niveles críticos.</p>
+    <canvas id="chartCriticos"></canvas>
+    <div class="report-actions">
+      <button class="report-btn primary"><i class="fas fa-eye"></i> Ver Detalle</button>
+      <button class="report-btn secondary"><i class="fas fa-file-pdf"></i> PDF</button>
+    </div>
+  </div>
+
+  <!-- Valorización de Inventario -->
+  <div class="report-card">
+    <div class="report-header">
+      <div class="report-icon primary"><i class="fas fa-chart-pie"></i></div>
+      <h3 class="report-title">Valorización de Inventario</h3>
+    </div>
+    <p class="report-description">Valor total del inventario actual.</p>
+    <canvas id="chartValor"></canvas>
+    <div class="report-actions">
+      <button class="report-btn primary"><i class="fas fa-eye"></i> Ver Detalle</button>
+      <button class="report-btn secondary"><i class="fas fa-file-pdf"></i> PDF</button>
+    </div>
+  </div>
+
+  <!-- Movimientos de Inventario -->
+  <div class="report-card">
+    <div class="report-header">
+      <div class="report-icon success"><i class="fas fa-exchange-alt"></i></div>
+      <h3 class="report-title">Movimientos de Inventario</h3>
+    </div>
+    <p class="report-description">Entradas y salidas del mes actual.</p>
+    <canvas id="chartMovimientos"></canvas>
+    <div class="report-actions">
+      <button class="report-btn primary"><i class="fas fa-eye"></i> Ver Detalle</button>
+      <button class="report-btn secondary"><i class="fas fa-file-pdf"></i> PDF</button>
+    </div>
+  </div>
+
+  <!-- Análisis por Categoría -->
+  <div class="report-card">
+    <div class="report-header">
+      <div class="report-icon warning"><i class="fas fa-tags"></i></div>
+      <h3 class="report-title">Análisis por Categoría</h3>
+    </div>
+    <p class="report-description">Distribución de inventario por categorías.</p>
+    <canvas id="chartCategorias"></canvas>
+    <div class="report-actions">
+      <button class="report-btn primary"><i class="fas fa-eye"></i> Ver Detalle</button>
+      <button class="report-btn secondary"><i class="fas fa-file-pdf"></i> PDF</button>
+    </div>
+  </div>
+
+  <!-- Reporte Mensual -->
+  <div class="report-card">
+    <div class="report-header">
+      <div class="report-icon primary"><i class="fas fa-calendar-check"></i></div>
+      <h3 class="report-title">Reporte Mensual</h3>
+    </div>
+    <p class="report-description">Consolidado mensual de inventario.</p>
+    <canvas id="chartMensual"></canvas>
+    <div class="report-actions">
+      <button class="report-btn primary"><i class="fas fa-eye"></i> Ver Detalle</button>
+      <button class="report-btn secondary"><i class="fas fa-file-pdf"></i> PDF</button>
+    </div>
+  </div>
+
+  <!-- Rotación de Stock -->
+  <div class="report-card">
+    <div class="report-header">
+      <div class="report-icon success"><i class="fas fa-sync-alt"></i></div>
+      <h3 class="report-title">Rotación de Stock</h3>
+    </div>
+    <p class="report-description">Tiempo promedio de reposición de productos.</p>
+    <canvas id="chartRotacion"></canvas>
+    <div class="report-actions">
+      <button class="report-btn primary"><i class="fas fa-eye"></i> Ver Detalle</button>
+      <button class="report-btn secondary"><i class="fas fa-file-pdf"></i> PDF</button>
+    </div>
+  </div>
+
+  <!-- Costos por Proveedor -->
+  <div class="report-card">
+    <div class="report-header">
+      <div class="report-icon warning"><i class="fas fa-dollar-sign"></i></div>
+      <h3 class="report-title">Costos por Proveedor</h3>
+    </div>
+    <p class="report-description">Comparativa de costos entre proveedores.</p>
+    <canvas id="chartCostos"></canvas>
+    <div class="report-actions">
+      <button class="report-btn primary"><i class="fas fa-eye"></i> Ver Detalle</button>
+      <button class="report-btn secondary"><i class="fas fa-file-pdf"></i> PDF</button>
+    </div>
+  </div>
+
+  <!-- Tendencia de Ventas -->
+  <div class="report-card">
+    <div class="report-header">
+      <div class="report-icon primary"><i class="fas fa-chart-line"></i></div>
+      <h3 class="report-title">Tendencia de Ventas</h3>
+    </div>
+    <p class="report-description">Crecimiento de ventas por trimestre.</p>
+    <canvas id="chartVentas"></canvas>
+    <div class="report-actions">
+      <button class="report-btn primary"><i class="fas fa-eye"></i> Ver Detalle</button>
+      <button class="report-btn secondary"><i class="fas fa-file-pdf"></i> PDF</button>
+    </div>
+  </div>
+
+  <!-- Cumplimiento de Pedidos -->
+  <div class="report-card">
+    <div class="report-header">
+      <div class="report-icon danger"><i class="fas fa-check-circle"></i></div>
+      <h3 class="report-title">Cumplimiento de Pedidos</h3>
+    </div>
+    <p class="report-description">Nivel de cumplimiento en la entrega de pedidos.</p>
+    <canvas id="chartPedidos"></canvas>
+    <div class="report-actions">
+      <button class="report-btn primary"><i class="fas fa-eye"></i> Ver Detalle</button>
+      <button class="report-btn secondary"><i class="fas fa-file-pdf"></i> PDF</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Productos Críticos
+  new Chart(document.getElementById('chartCriticos'), {
+    type: 'bar',
+    data: { labels: ['Sin Stock', 'Stock Bajo'], datasets: [{ data: [5, 3], backgroundColor: ['#ef4444', '#f59e0b'], borderRadius: 12 }] },
+    options: { plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+  });
+
+  // Valorización
+  new Chart(document.getElementById('chartValor'), {
+    type: 'doughnut',
+    data: { labels: ['Valor Total', 'Productos'], datasets: [{ data: [38152, 19], backgroundColor: ['#3b82f6', '#8b5cf6'] }] },
+    options: { plugins:{legend:{position:'bottom'}} }
+  });
+
+  // Movimientos
+  new Chart(document.getElementById('chartMovimientos'), {
+    type: 'bar',
+    data: { labels: ['Entradas', 'Salidas'], datasets: [{ data: [145, 78], backgroundColor: ['#10b981', '#ef4444'], borderRadius: 12 }] },
+    options: { plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+  });
+
+  // Categorías
+  new Chart(document.getElementById('chartCategorias'), {
+    type: 'pie',
+    data: { labels: ['Categorías', 'Mejor Cat.'], datasets: [{ data: [7, 88], backgroundColor: ['#06b6d4', '#f59e0b'] }] },
+    options: { plugins:{legend:{position:'right'}} }
+  });
+
+  // Reporte Mensual
+  new Chart(document.getElementById('chartMensual'), {
+    type: 'line',
+    data: { labels: ['Oct', 'Nov', 'Dic'], datasets: [{ label:'Crecimiento', data:[5,9,12], borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.2)', fill:true, tension:0.4 }] },
+    options: { plugins:{legend:{display:false}} }
+  });
+
+  // Rotación de Stock
+  new Chart(document.getElementById('chartRotacion'), {
+    type: 'bar',
+    data: { labels: ['Promedio Días'], datasets: [{ data:[22], backgroundColor:'#8b5cf6', borderRadius:12 }] },
+    options: { plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+  });
+
+  // Costos por Proveedor
+  new Chart(document.getElementById('chartCostos'), {
+    type: 'bar',
+    data: { labels: ['Prov A','Prov B','Prov C'], datasets: [{ data:[12000,9500,7800], backgroundColor:['#f59e0b','#10b981','#3b82f6'], borderRadius:12 }] },
+    options: { plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+  });
+
+  // Tendencia de Ventas
+  new Chart(document.getElementById('chartVentas'), {
+    type: 'line',
+    data: { labels: ['Q1','Q2','Q3','Q4'], datasets: [{ label:'Ventas', data:[15000,18000,22000,25000], borderColor:'#ef4444', backgroundColor:'rgba(239,68,68,0.2)', fill:true, tension:0.4 }] }
+  });
+
+  // Cumplimiento de Pedidos
+  new Chart(document.getElementById('chartPedidos'), {
+    type: 'radar',
+    data: { labels:['A Tiempo','Retraso','Cancelado'], datasets:[{ label:'Pedidos', data:[92,5,3], backgroundColor:'rgba(16,185,129,0.2)', borderColor:'#10b981', pointBackgroundColor:'#10b981'}] },
+    options: { scales:{ r:{ suggestedMin:0, suggestedMax:100 } } }
+  });
+</script>
+
+
+</body>

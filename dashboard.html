@@ -951,7 +951,7 @@
             <nav class="sidebar-nav">
                 <ul>
                     <li class="active">
-                        <a href="#"><i class="fas fa-home"></i><span>Dashboard</span></a>
+                        <a href="dashboard.html"><i class="fas fa-home"></i><span>Dashboard</span></a>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-box"></i><span>Productos</span></a>
@@ -960,10 +960,10 @@
                         <a href="#"><i class="fas fa-arrow-down"></i><span>Entradas</span></a>
                     </li>
                     <li>
-                        <a href="#"><i class="fas fa-arrow-up"></i><span>Salidas</span></a>
+                        <a href="salidas.html"><i class="fas fa-arrow-up"></i><span>Salidas</span></a>
                     </li>
                     <li>
-                        <a href="#"><i class="fas fa-chart-line"></i><span>Reportes</span></a>
+                        <a href="Reportes.html"><i class="fas fa-chart-line"></i><span>Reportes</span></a>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-users"></i><span>Proveedores</span></a>
@@ -985,7 +985,7 @@
         <main class="main-content">
             <header class="header">
                 <div class="search-container">
-                    <input type="text" class="search-input" placeholder="Buscar productos, SKU o categoría...">
+                    <input type="text" class="search-input" placeholder="Buscar productos, códigos o tapones...">
                     <i class="fas fa-search search-icon"></i>
                 </div>
                 <div class="user-profile">
@@ -1001,8 +1001,8 @@
                             <i class="fas fa-cubes"></i>
                         </div>
                         <div class="metric-info">
-                            <h3>Productos Totales</h3>
-                            <div class="metric-value">2,450</div>
+                            <h3>Productos Registrados</h3>
+                            <div class="metric-value">19</div>
                         </div>
                     </div>
                     <div class="metric-card">
@@ -1010,8 +1010,8 @@
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>
                         <div class="metric-info">
-                            <h3>Stock Bajo</h3>
-                            <div class="metric-value warning">32</div>
+                            <h3>Productos con Stock Agotado</h3>
+                            <div class="metric-value warning">4</div>
                         </div>
                     </div>
                     <div class="metric-card">
@@ -1019,8 +1019,8 @@
                             <i class="fas fa-dollar-sign"></i>
                         </div>
                         <div class="metric-info">
-                            <h3>Valor Total</h3>
-                            <div class="metric-value">$1,250,500</div>
+                            <h3>Valor Inventario</h3>
+                            <div class="metric-value">$38,152.50</div>
                         </div>
                     </div>
                 </div>
@@ -1030,12 +1030,12 @@
                 <div class="card">
                     <h2 class="card-title">
                         <i class="fas fa-chart-line"></i>
-                        Historial de Inventario
+                        Movimientos de Inventario
                     </h2>
                     <div class="chart-container">
                         <div class="chart-placeholder">
-                            <i class="fas fa-chart-area"></i>
-                            <p>Gráfico de Tendencias del Inventario</p>
+                            <i class="fas fa-exchange-alt"></i>
+                            <p>Entradas vs Salidas</p>
                             <small style="color: var(--gray-400); margin-top: 0.5rem; display: block;">Últimos 30 días</small>
                         </div>
                     </div>
@@ -1044,43 +1044,57 @@
                 <div class="card">
                     <h2 class="card-title">
                         <i class="fas fa-chart-pie"></i>
-                        Por Categoría
+                        Stock por Categoría
                     </h2>
                     <div class="bar-chart">
                         <div class="bar-item">
-                            <div class="bar-label">Electrónica</div>
+                            <div class="bar-label">Adaptadores</div>
                             <div class="bar-track">
-                                <div class="bar-fill" style="width: 85%;"></div>
+                                <div class="bar-fill" style="width: 78%;"></div>
                             </div>
-                            <div class="bar-value">85%</div>
+                            <div class="bar-value">78%</div>
                         </div>
                         <div class="bar-item">
-                            <div class="bar-label">Computadoras</div>
+                            <div class="bar-label">Tapones</div>
                             <div class="bar-track">
-                                <div class="bar-fill" style="width: 72%;"></div>
+                                <div class="bar-fill" style="width: 62%;"></div>
                             </div>
-                            <div class="bar-value">72%</div>
+                            <div class="bar-value">62%</div>
                         </div>
                         <div class="bar-item">
-                            <div class="bar-label">Oficina</div>
+                            <div class="bar-label">Uniones</div>
                             <div class="bar-track">
-                                <div class="bar-fill" style="width: 58%;"></div>
+                                <div class="bar-fill" style="width: 45%;"></div>
                             </div>
-                            <div class="bar-value">58%</div>
+                            <div class="bar-value">45%</div>
                         </div>
                         <div class="bar-item">
-                            <div class="bar-label">Accesorios</div>
+                            <div class="bar-label">Serie FLARE</div>
                             <div class="bar-track">
-                                <div class="bar-fill" style="width: 41%;"></div>
+                                <div class="bar-fill" style="width: 88%;"></div>
                             </div>
-                            <div class="bar-value">41%</div>
+                            <div class="bar-value">88%</div>
                         </div>
                         <div class="bar-item">
-                            <div class="bar-label">Limpieza</div>
+                            <div class="bar-label">Serie ROSCA</div>
                             <div class="bar-track">
-                                <div class="bar-fill" style="width: 25%;"></div>
+                                <div class="bar-fill" style="width: 35%;"></div>
                             </div>
-                            <div class="bar-value">25%</div>
+                            <div class="bar-value">35%</div>
+                        </div>
+                           <div class="bar-item">
+                            <div class="bar-label">Espiga</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 45%;"></div>
+                            </div>
+                            <div class="bar-value">45%</div>
+                        </div>
+                           <div class="bar-item">
+                            <div class="bar-label">Manguera</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 65%;"></div>
+                            </div>
+                            <div class="bar-value">65%</div>
                         </div>
                     </div>
                 </div>
@@ -1101,22 +1115,22 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>SKU</th>
+                                <th>Código</th>
                                 <th>Producto</th>
                                 <th>Categoría</th>
                                 <th>Cantidad</th>
-                                <th>Precio</th>
+                                <th>Costo Unitario</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><span class="sku-code">KM-T-789</span></td>
-                                <td class="product-name">Teclado Mecánico RGB</td>
-                                <td>Electrónica</td>
-                                <td style="font-weight: 700; color: var(--gray-900);">150</td>
-                                <td class="price">$75.00</td>
+                                <td><span class="sku-code">41FS-04</span></td>
+                                <td class="product-name">Adaptadores Latón SERIE FLARE 45</td>
+                                <td>Plomería</td>
+                                <td style="font-weight: 700; color: var(--gray-900);">11</td>
+                                <td class="price">$39.50</td>
                                 <td><span class="status-badge status-in-stock">En Stock</span></td>
                                 <td class="actions">
                                     <button class="action-btn" title="Editar">
@@ -1128,11 +1142,11 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td><span class="sku-code">MN-C-321</span></td>
-                                <td class="product-name">Monitor Curvo 27"</td>
-                                <td>Electrónica</td>
-                                <td style="font-weight: 700; color: var(--warning);">5</td>
-                                <td class="price">$320.00</td>
+                                <td><span class="sku-code">41FS-05</span></td>
+                                <td class="product-name">Adaptadores Latón SERIE FLARE 45</td>
+                                <td>Plomería</td>
+                                <td style="font-weight: 700; color: var(--warning);">6</td>
+                                <td class="price">$49.00</td>
                                 <td><span class="status-badge status-low">Stock Bajo</span></td>
                                 <td class="actions">
                                     <button class="action-btn" title="Editar">
@@ -1144,11 +1158,11 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td><span class="sku-code">MP-P-011</span></td>
-                                <td class="product-name">Papel de Impresión A4</td>
-                                <td>Oficina</td>
+                                <td><span class="sku-code">43F-04-02</span></td>
+                                <td class="product-name">Adaptadores Latón SERIE FLARE 45</td>
+                                <td>Plomería</td>
                                 <td style="font-weight: 700; color: var(--danger);">0</td>
-                                <td class="price">$5.50</td>
+                                <td class="price">$134.00</td>
                                 <td><span class="status-badge status-out">Agotado</span></td>
                                 <td class="actions">
                                     <button class="action-btn" title="Editar">
@@ -1160,11 +1174,11 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td><span class="sku-code">LP-U-987</span></td>
-                                <td class="product-name">Laptop Ultra Delgada 15"</td>
-                                <td>Computadoras</td>
-                                <td style="font-weight: 700; color: var(--gray-900);">75</td>
-                                <td class="price">$1,200.00</td>
+                                <td><span class="sku-code">40F-04</span></td>
+                                <td class="product-name">TAPON HEMBRA 1/4 SAE</td>
+                                <td>Plomería</td>
+                                <td style="font-weight: 700; color: var(--gray-900);">28</td>
+                                <td class="price">$34.30</td>
                                 <td><span class="status-badge status-in-stock">En Stock</span></td>
                                 <td class="actions">
                                     <button class="action-btn" title="Editar">
@@ -1176,11 +1190,11 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td><span class="sku-code">MS-E-456</span></td>
-                                <td class="product-name">Mouse Ergonómico Inalámbrico</td>
-                                <td>Electrónica</td>
-                                <td style="font-weight: 700; color: var(--warning);">25</td>
-                                <td class="price">$45.50</td>
+                                <td><span class="sku-code">42F-10</span></td>
+                                <td class="product-name">Adaptadores Latón SERIE FLARE 45</td>
+                                <td>Plomería</td>
+                                <td style="font-weight: 700; color: var(--warning);">5</td>
+                                <td class="price">$204.00</td>
                                 <td><span class="status-badge status-low">Stock Bajo</span></td>
                                 <td class="actions">
                                     <button class="action-btn" title="Editar">
@@ -1192,11 +1206,11 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td><span class="sku-code">HD-S-234</span></td>
-                                <td class="product-name">Disco Duro SSD 1TB</td>
-                                <td>Computadoras</td>
-                                <td style="font-weight: 700; color: var(--gray-900);">120</td>
-                                <td class="price">$89.99</td>
+                                <td><span class="sku-code">42F-10-08</span></td>
+                                <td class="product-name">UNION DE LATON</td>
+                                <td>Plomería</td>
+                                <td style="font-weight: 700; color: var(--gray-900);">10</td>
+                                <td class="price">$0.00</td>
                                 <td><span class="status-badge status-in-stock">En Stock</span></td>
                                 <td class="actions">
                                     <button class="action-btn" title="Editar">
