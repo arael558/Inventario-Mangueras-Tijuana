@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Inventario | StockPro ✨</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            
+            --primary: #3b82f6;
+            --primary-light: #60a5fa;
+            --primary-dark: #1d4ed8;
+            
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            
+            --glow-primary: 0 0 20px rgba(59, 130, 246, 0.3);
+            --glow-secondary: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 30%, var(--gray-50) 100%);
+            color: var(--gray-900);
+            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            background-image: 
+                radial-gradient(circle at 20px 20px, var(--primary) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: var(--white);
+            border-right: 1px solid var(--gray-200);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: var(--shadow-xl);
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: white;
+            box-shadow: var(--shadow-lg), var(--glow-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: rotate(45deg);
+            animation: logoShine 3s linear infinite;
+        }
+
+        @keyframes logoShine {
+            0% { transform: rotate(45deg) translateY(-100%); }
+            100% { transform: rotate(45deg) translateY(100%); }
+        }
+
+        .logo-text {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            border-radius: 16px;
+        }
+
+        .sidebar-nav a::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .sidebar-nav a:hover::after {
+            left: 100%;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav .active a {
+            color: var(--white);
+            transform: translateX(8px) scale(1.02);
+            box-shadow: var(--shadow-lg), var(--glow-primary);
+        }
+
+        .sidebar-nav a:hover::before,
+        .sidebar-nav .active a::before {
+            opacity: 1;
+        }
+
+        .sidebar-nav i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            z-index: 1;
+            position: relative;
+        }
+
+        .sidebar-nav span {
+            z-index: 1;
+            position: relative;
+        }
+
+        .logout-section {
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .logout-btn {
+            color: var(--danger) !important;
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.1);
+        }
+
+        .logout-btn:hover {
+            background: var(--danger) !important;
+            color: var(--white) !important;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background: var(--gray-50);
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+        }
+
+        .search-container {
+            position: relative;
+            width: 400px;
+            max-width: 50%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3.5rem;
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            color: var(--gray-900);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), var(--shadow-md);
+            transform: scale(1.02);
+        }
+
+        .search-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .search-input:focus + .search-icon {
+            color: var(--primary);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 1rem;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: var(--shadow-md);
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: var(--shadow-xl), var(--glow-primary);
+        }
+
+        /* Metrics Cards */
+        .metrics-section {
+            margin-bottom: 2rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .metric-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 24px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: left;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-2xl);
+            border-color: var(--gray-300);
+        }
+
+        .metric-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .metric-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-icon::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: iconGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes iconGlow {
+            0%, 100% { transform: rotate(45deg) translateX(-100%); }
+            50% { transform: rotate(45deg) translateX(100%); }
+        }
+
+        .metric-icon.total {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        }
+
+        .metric-icon.warning {
+            background: linear-gradient(135deg, var(--warning), #fb923c);
+        }
+
+        .metric-icon.success {
+            background: linear-gradient(135deg, var(--success), var(--accent));
+        }
+
+        .metric-info h3 {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-value {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            line-height: 1;
+        }
+
+        .metric-value.warning {
+            color: var(--warning);
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gray-200), transparent);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--gray-300);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title i {
+            color: var(--primary);
+        }
+
+        /* Chart Placeholder */
+        .chart-container {
+            height: 300px;
+            background: linear-gradient(135deg, var(--gray-50), var(--gray-100));
+            border: 2px dashed var(--gray-300);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-placeholder {
+            text-align: center;
+            color: var(--gray-400);
+        }
+
+        .chart-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            opacity: 0.6;
+        }
+
+        /* Bar Chart */
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .bar-label {
+            width: 100px;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .bar-track {
+            flex: 1;
+            height: 12px;
+            background: var(--gray-100);
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 6px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .bar-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: barShimmer 2s infinite;
+        }
+
+        @keyframes barShimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .bar-value {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            font-weight: 700;
+            min-width: 45px;
+            text-align: right;
+        }
+
+        /* Table Section */
+        .table-section {
+            grid-column: 1 / -1;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .add-product-btn {
+            padding: 0.875rem 1.75rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-md);
+            font-size: 0.9rem;
+        }
+
+        .add-product-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: var(--shadow-xl), var(--glow-primary);
+        }
+
+        .add-product-btn:active {
+            transform: translateY(0) scale(1.02);
+        }
+
+        /* Table */
+        .table-container {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--gray-50);
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        td {
+            padding: 1.25rem 1.5rem;
+            color: var(--gray-600);
+            font-weight: 500;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        tbody tr {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        tbody tr:hover {
+            background: var(--gray-50);
+            transform: scale(1.005);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .product-name {
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .sku-code {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--primary);
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .price {
+            color: var(--success);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .status-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .status-in-stock {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .status-in-stock::before {
+            background: var(--success);
+        }
+
+        .status-low {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .status-low::before {
+            background: var(--warning);
+        }
+
+        .status-out {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .status-out::before {
+            background: var(--danger);
+        }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 12px;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .action-btn.delete:hover {
+            background: var(--danger);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 200;
+            width: 48px;
+            height: 48px;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            color: var(--gray-700);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Loading Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .metric-card,
+        .card {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .metric-card:nth-child(1) { animation-delay: 0.1s; }
+        .metric-card:nth-child(2) { animation-delay: 0.2s; }
+        .metric-card:nth-child(3) { animation-delay: 0.3s; }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-container {
+                max-width: 70%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: -300px;
+                height: 100vh;
+                z-index: 150;
+                transition: left 0.3s ease;
+                box-shadow: none;
+            }
+
+            .sidebar.active {
+                left: 0;
+                box-shadow: var(--shadow-2xl);
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .search-container {
+                max-width: 100%;
+            }
+
+            .user-profile {
+                justify-content: space-between;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 700px;
+            }
+
+            th, td {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 0.75rem;
+            }
+            
+            .header {
+                padding: 1.25rem;
+                border-radius: 16px;
+            }
+            
+            .card {
+                padding: 1.25rem;
+                border-radius: 16px;
+            }
+            
+            .metric-card {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+            
+            .metric-icon {
+                width: 56px;
+                height: 56px;
+            }
+            
+            .metric-value {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* Overlay for mobile menu */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 140;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-cube"></i>
+                </div>
+                <div class="logo-text">StockPro</div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="dashboard.html"><i class="fas fa-home"></i><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-box"></i><span>Productos</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-arrow-down"></i><span>Entradas</span></a>
+                    </li>
+                    <li>
+                        <a href="salidas.html"><i class="fas fa-arrow-up"></i><span>Salidas</span></a>
+                    </li>
+                    <li>
+                        <a href="Reportes.html"><i class="fas fa-chart-line"></i><span>Reportes</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-users"></i><span>Proveedores</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-cog"></i><span>Configuración</span></a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="logout-section">
+                <a href="#" class="logout-btn" style="display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; border-radius: 16px; text-decoration: none; transition: all 0.3s ease;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Cerrar Sesión</span>
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Buscar productos, códigos o tapones...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div class="user-profile">
+                    <span class="user-name">Carlos Vizcaín</span>
+                    <div class="user-avatar">CV</div>
+                </div>
+            </header>
+
+            <section class="metrics-section">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon total">
+                            <i class="fas fa-cubes"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>Productos Registrados</h3>
+                            <div class="metric-value">19</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>Productos con Stock Agotado</h3>
+                            <div class="metric-value warning">4</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon success">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>Valor Inventario</h3>
+                            <div class="metric-value">$38,152.50</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h2 class="card-title">
+                        <i class="fas fa-chart-line"></i>
+                        Movimientos de Inventario
+                    </h2>
+                    <div class="chart-container">
+                        <div class="chart-placeholder">
+                            <i class="fas fa-exchange-alt"></i>
+                            <p>Entradas vs Salidas</p>
+                            <small style="color: var(--gray-400); margin-top: 0.5rem; display: block;">Últimos 30 días</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">
+                        <i class="fas fa-chart-pie"></i>
+                        Stock por Categoría
+                    </h2>
+                    <div class="bar-chart">
+                        <div class="bar-item">
+                            <div class="bar-label">Adaptadores</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 78%;"></div>
+                            </div>
+                            <div class="bar-value">78%</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Tapones</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 62%;"></div>
+                            </div>
+                            <div class="bar-value">62%</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Uniones</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 45%;"></div>
+                            </div>
+                            <div class="bar-value">45%</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Serie FLARE</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 88%;"></div>
+                            </div>
+                            <div class="bar-value">88%</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Serie ROSCA</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 35%;"></div>
+                            </div>
+                            <div class="bar-value">35%</div>
+                        </div>
+                           <div class="bar-item">
+                            <div class="bar-label">Espiga</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 45%;"></div>
+                            </div>
+                            <div class="bar-value">45%</div>
+                        </div>
+                           <div class="bar-item">
+                            <div class="bar-label">Manguera</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 65%;"></div>
+                            </div>
+                            <div class="bar-value">65%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="card table-section">
+                <div class="table-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-table"></i>
+                        Inventario de Productos
+                    </h2>
+                    <button class="add-product-btn">
+                        <i class="fas fa-plus"></i>
+                        Agregar Producto
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Producto</th>
+                                <th>Categoría</th>
+                                <th>Cantidad</th>
+                                <th>Costo Unitario</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="sku-code">41FS-04</span></td>
+                                <td class="product-name">Adaptadores Latón SERIE FLARE 45</td>
+                                <td>Plomería</td>
+                                <td style="font-weight: 700; color: var(--gray-900);">11</td>
+                                <td class="price">$39.50</td>
+                                <td><span class="status-badge status-in-stock">En Stock</span></td>
+                                <td class="actions">
+                                    <button class="action-btn" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="sku-code">41FS-05</span></td>
+                                <td class="product-name">Adaptadores Latón SERIE FLARE 45</td>
+                                <td>Plomería</td>
+                                <td style="font-weight: 700; color: var(--warning);">6</td>
+                                <td class="price">$49.00</td>
+                                <td><span class="status-badge status-low">Stock Bajo</span></td>
+                                <td class="actions">
+                                    <button class="action-btn" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="sku-code">43F-04-02</span></td>
+                                <td class="product-name">Adaptadores Latón SERIE FLARE 45</td>
+                                <td>Plomería</td>
+                                <td style="font-weight: 700; color: var(--danger);">0</td>
+                                <td class="price">$134.00</td>
+                                <td><span class="status-badge status-out">Agotado</span></td>
+                                <td class="actions">
+                                    <button class="action-btn" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="sku-code">40F-04</span></td>
+                                <td class="product-name">TAPON HEMBRA 1/4 SAE</td>
+                                <td>Plomería</td>
+                                <td style="font-weight: 700; color: var(--gray-900);">28</td>
+                                <td class="price">$34.30</td>
+                                <td><span class="status-badge status-in-stock">En Stock</span></td>
+                                <td class="actions">
+                                    <button class="action-btn" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="sku-code">42F-10</span></td>
+                                <td class="product-name">Adaptadores Latón SERIE FLARE 45</td>
+                                <td>Plomería</td>
+                                <td style="font-weight: 700; color: var(--warning);">5</td>
+                                <td class="price">$204.00</td>
+                                <td><span class="status-badge status-low">Stock Bajo</span></td>
+                                <td class="actions">
+                                    <button class="action-btn" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="sku-code">42F-10-08</span></td>
+                                <td class="product-name">UNION DE LATON</td>
+                                <td>Plomería</td>
+                                <td style="font-weight: 700; color: var(--gray-900);">10</td>
+                                <td class="price">$0.00</td>
+                                <td><span class="status-badge status-in-stock">En Stock</span></td>
+                                <td class="actions">
+                                    <button class="action-btn" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="mobile-menu-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const isActive = sidebar.classList.contains('active');
+            
+            if (isActive) {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            } else {
+                sidebar.classList.add('active');
+                overlay.classList.add('active');
+            }
+        }
+
+        // Animate bars on page load
+        window.addEventListener('load', function() {
+            const bars = document.querySelectorAll('.bar-fill');
+            bars.forEach((bar, index) => {
+                setTimeout(() => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 100);
+                }, index * 200);
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Table row click animation
+        const tableRows = document.querySelectorAll('tbody tr');
+        tableRows.forEach(row => {
+            row.addEventListener('click', function() {
+                // Add a subtle pulse effect
+                this.style.transform = 'scale(1.01)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1.005)';
+                }, 100);
+            });
+        });
+
+        // Add product button animation
+        const addBtn = document.querySelector('.add-product-btn');
+        addBtn.addEventListener('click', function() {
+            // Simulate adding product
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Agregando...';
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-check"></i> ¡Agregado!';
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-plus"></i> Agregar Producto';
+                }, 1000);
+            }, 1500);
+        });
+    </script>
+</body>
+</html>

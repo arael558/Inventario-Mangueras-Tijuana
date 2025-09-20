@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salidas de Inventario | StockPro ✨</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            
+            --primary: #3b82f6;
+            --primary-light: #60a5fa;
+            --primary-dark: #1d4ed8;
+            
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            
+            --glow-primary: 0 0 20px rgba(59, 130, 246, 0.3);
+            --glow-secondary: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 30%, var(--gray-50) 100%);
+            color: var(--gray-900);
+            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            background-image: 
+                radial-gradient(circle at 20px 20px, var(--primary) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: var(--white);
+            border-right: 1px solid var(--gray-200);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: var(--shadow-xl);
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: white;
+            box-shadow: var(--shadow-lg), var(--glow-primary);
+        }
+
+        .logo-text {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            border-radius: 16px;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav .active a {
+            color: var(--white);
+            transform: translateX(8px) scale(1.02);
+            box-shadow: var(--shadow-lg), var(--glow-primary);
+        }
+
+        .sidebar-nav a:hover::before,
+        .sidebar-nav .active a::before {
+            opacity: 1;
+        }
+
+        .sidebar-nav i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            z-index: 1;
+            position: relative;
+        }
+
+        .sidebar-nav span {
+            z-index: 1;
+            position: relative;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background: var(--gray-50);
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .page-title h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-title i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .search-container {
+            position: relative;
+            width: 400px;
+            max-width: 50%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3.5rem;
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            color: var(--gray-900);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), var(--shadow-md);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 1rem;
+        }
+
+        .actions-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: var(--shadow-md);
+            font-size: 0.95rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: var(--shadow-xl), var(--glow-primary);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-200);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 24px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: left;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-2xl);
+            border-color: var(--gray-300);
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-icon.primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .stat-icon.warning {
+            background: linear-gradient(135deg, var(--warning), #fb923c);
+        }
+
+        .stat-icon.success {
+            background: linear-gradient(135deg, var(--success), var(--accent));
+        }
+
+        .stat-info h3 {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            line-height: 1;
+        }
+
+        .table-section {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .filter-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            color: var(--gray-700);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .date-input {
+            padding: 0.75rem 1rem;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            color: var(--gray-700);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .table-container {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--gray-50);
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        td {
+            padding: 1.25rem 1.5rem;
+            color: var(--gray-600);
+            font-weight: 500;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        tbody tr {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        tbody tr:hover {
+            background: var(--gray-50);
+            transform: scale(1.005);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .product-code {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--primary);
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .quantity {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .cost {
+            color: var(--success);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .date {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .table-action-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 8px;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+        }
+
+        .table-action-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .table-action-btn.delete:hover {
+            background: var(--danger);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -300px;
+                height: 100vh;
+                z-index: 150;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.active {
+                left: 0;
+                box-shadow: var(--shadow-2xl);
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-container {
+                max-width: 100%;
+            }
+
+            .actions-section {
+                flex-direction: column;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-section {
+                flex-direction: column;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-arrow-up"></i>
+                </div>
+                <div class="logo-text">Salidas</div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="dashboard.html"><i class="fas fa-home"></i><span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-box"></i><span>Productos</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-arrow-down"></i><span>Entradas</span></a>
+                    </li>
+                    <li class="active">
+                        <a href="salidas.html"><i class="fas fa-arrow-up"></i><span>Salidas</span></a>
+                    </li>
+                    <li>
+                        <a href="Reportes.html"><i class="fas fa-chart-line"></i><span>Reportes</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-users"></i><span>Proveedores</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-cog"></i><span>Configuración</span></a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="page-title">
+                    <i class="fas fa-arrow-up"></i>
+                    <h1>Salidas de Inventario</h1>
+                </div>
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Buscar salidas, códigos o documentos...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+            </header>
+
+            <section class="actions-section">
+                <button class="action-btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Nueva Salida
+                </button>
+                <button class="action-btn btn-secondary">
+                    <i class="fas fa-download"></i>
+                    Exportar Excel
+                </button>
+                <button class="action-btn btn-secondary">
+                    <i class="fas fa-print"></i>
+                    Imprimir Reporte
+                </button>
+            </section>
+
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon primary">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total Salidas Hoy</h3>
+                        <div class="stat-value">12</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon warning">
+                        <i class="fas fa-calendar-week"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Salidas Esta Semana</h3>
+                        <div class="stat-value">78</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon success">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Valor Total Salidas</h3>
+                        <div class="stat-value">$8,430</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="table-section">
+                <div class="table-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-list"></i>
+                        Registro de Salidas
+                    </h2>
+                </div>
+
+                <div class="filter-section">
+                    <select class="filter-select">
+                        <option value="">Todos los Códigos</option>
+                        <option value="RM265">RM265</option>
+                        <option value="RM266">RM266</option>
+                        <option value="F7326">F7326</option>
+                    </select>
+                    <input type="date" class="date-input" value="2022-12-28">
+                    <input type="date" class="date-input" value="2023-01-05">
+                    <select class="filter-select">
+                        <option value="">Todos los productos</option>
+                        <option value="adaptadores">Adaptadores</option>
+                        <option value="tapones">Tapones</option>
+                        <option value="uniones">Uniones</option>
+                    </select>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Código Producto</th>
+                                <th>Producto</th>
+                                <th>Descripción</th>
+                                <th>Cantidad</th>
+                                <th>Costo Unitario</th>
+                                <th>Costo Total</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="date">29/12/2022</td>
+                                <td><span class="product-code">6G-6MJ</span></td>
+                                <td class="product-name">1-MFI-06-06</td>
+                                <td>Adaptador MFI 6-06</td>
+                                <td class="quantity">2</td>
+                                <td class="cost">$94.80</td>
+                                <td class="cost">$189.60</td>
+                                <td class="table-actions">
+                                    <button class="table-action-btn" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="table-action-btn delete" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="date">29/12/2022</td>
+                                <td><span class="product-code">8G-10FJX</span></td>
+                                <td class="product-name">1-FIX-10-08</td>
+                                <td>Adaptador de Fijación 10-08</td>
+                                <td class="quantity">2</td>
+                                <td class="cost">$115.20</td>
+                                <td class="cost">$230.40</td>
+                                <td class="table-actions">
+                                    <button class="table-action-btn" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="table-action-btn delete" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="date">30/12/2022</td>
+                                <td><span class="product-code">41WL-04</span></td>
+                                <td class="product-name">TAPON HEMBRA 1/4 SAE</td>
+                                <td>Tapón Hembra 1/4 SAE</td>
+                                <td class="quantity">4</td>
+                                <td class="cost">$34.30</td>
+                                <td class="cost">$137.20</td>
+                                <td class="table-actions">
+                                    <button class="table-action-btn" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="table-action-btn delete" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="date">30/12/2022</td>
+                                <td><span class="product-code">8G-8FJX</span></td>
+                                <td class="product-name">1-FIX-08-08</td>
+                                <td>Adaptador de Fijación 8-08</td>
+                                <td class="quantity">1</td>
+                                <td class="cost">$98.70</td>
+                                <td class="cost">$98.70</td>
+                                <td class="table-actions">
+                                    <button class="table-action-btn" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="table-action-btn delete" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="date">30/12/2022</td>
+                                <td><span class="product-code">10G-12MJ</span></td>
+                                <td class="product-name">1-MFI-12-10</td>
+                                <td>Adaptador MFI 12-10</td>
+                                <td class="quantity">2</td>
+                                <td class="cost">$142.50</td>
+                                <td class="cost">$285.00</td>
+                                <td class="table-actions">
+                                    <button class="table-action-btn" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="table-action-btn delete" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="date">03/01/2023</td>
+                                <td><span class="product-code">4G-4FJX</span></td>
+                                <td class="product-name">1-FIX-04-04</td>
+                                <td>Adaptador de Fijación 4-04</td>
+                                <td class="quantity">3</td>
+                                <td class="cost">$54.20</td>
+                                <td class="cost">$162.60</td>
+                                <td class="table-actions">
+                                    <button class="table-action-btn" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="table-action-btn delete" title="Eliminar">
+                                        <i class="fas fa-trash-alt">
