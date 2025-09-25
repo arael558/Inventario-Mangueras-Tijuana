@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proveedores | StockPro ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-900: #0f172a;
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 30%, var(--gray-50) 100%);
+            color: var(--gray-900);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .dashboard { display: flex; min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: var(--white);
+            border-right: 1px solid var(--gray-200);
+            padding: 2rem;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: white;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .logo-text {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-nav ul { list-style: none; }
+        
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav .active a,
+        .sidebar-nav a:hover {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            transform: translateX(8px);
+        }
+
+        .logout-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .logout-btn {
+            color: var(--danger) !important;
+            background: rgba(239, 68, 68, 0.05) !important;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background: var(--gray-50);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .search-container {
+            position: relative;
+            width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-600);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .page-title {
+            margin-bottom: 2rem;
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Proveedores Grid */
+        .proveedores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .proveedor-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .proveedor-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .proveedor-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .proveedor-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .proveedor-description {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .specialty-tag {
+            display: inline-block;
+            background: var(--gray-100);
+            color: var(--gray-700);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin: 0.25rem;
+        }
+
+        .contact-info {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .add-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-xl);
+            transition: transform 0.3s ease;
+        }
+
+        .add-btn:hover { transform: scale(1.1); }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -300px;
+                transition: left 0.3s ease;
+                z-index: 100;
+            }
+            .sidebar.active { left: 0; }
+            .main-content { padding: 1rem; }
+            .header { flex-direction: column; gap: 1rem; }
+            .search-container { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-cube"></i></div>
+                <div class="logo-text">StockPro</div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="dashboard.html"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+                    <li><a href="#"><i class="fas fa-box"></i><span>Productos</span></a></li>
+                    <li><a href="entradas.html"><i class="fas fa-arrow-down"></i><span>Entradas</span></a></li>
+                    <li><a href="salidas.html"><i class="fas fa-arrow-up"></i><span>Salidas</span></a></li>
+                    <li><a href="Reportes.html"><i class="fas fa-chart-line"></i><span>Reportes</span></a></li>
+                    <li class="active"><a href="#"><i class="fas fa-users"></i><span>Proveedores</span></a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i><span>Configuración</span></a></li>
+                </ul>
+            </nav>
+
+            <div class="logout-section">
+                <a href="#" class="logout-btn sidebar-nav" style="display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; border-radius: 16px; text-decoration: none;">
+                    <i class="fas fa-sign-out-alt"></i><span>Cerrar Sesión</span>
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Buscar proveedores...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div class="user-profile">
+                    <span class="user-name">Carlos Vizcaín</span>
+                    <div class="user-avatar">CV</div>
+                </div>
+            </header>
+
+            <div class="page-title">
+                <h1>Proveedores</h1>
+                <p>Gestiona tus proveedores de productos hidráulicos</p>
+            </div>
+
+            <div class="proveedores-grid">
+                <div class="proveedor-card">
+                    <div class="proveedor-logo" style="background: linear-gradient(135deg, #FFD700, #FFA500);">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <h3 class="proveedor-name">Parker Hannifin</h3>
+                    <p class="proveedor-description">Líder mundial en tecnologías de movimiento y control</p>
+                    <div>
+                        <span class="specialty-tag">Sistemas Hidráulicos</span>
+                        <span class="specialty-tag">Válvulas</span>
+                        <span class="specialty-tag">Filtros</span>
+                    </div>
+                    <div class="contact-info"><i class="fas fa-phone"></i> (555) 123-4567</div>
+                </div>
+
+                <div class="proveedor-card">
+                    <div class="proveedor-logo" style="background: linear-gradient(135deg, #E53E3E, #C53030);">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3 class="proveedor-name">Gates Corporation</h3>
+                    <p class="proveedor-description">Especialista en sistemas de transmisión de potencia</p>
+                    <div>
+                        <span class="specialty-tag">Mangueras</span>
+                        <span class="specialty-tag">Acoplamientos</span>
+                        <span class="specialty-tag">Bandas</span>
+                    </div>
+                    <div class="contact-info"><i class="fas fa-phone"></i> (555) 234-5678</div>
+                </div>
+
+                <div class="proveedor-card">
+                    <div class="proveedor-logo" style="background: linear-gradient(135deg, #4CAF50, #2E7D32);">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3 class="proveedor-name">Eaton Hydraulics</h3>
+                    <p class="proveedor-description">Soluciones innovadoras para aplicaciones hidráulicas</p>
+                    <div>
+                        <span class="specialty-tag">Bombas</span>
+                        <span class="specialty-tag">Motores</span>
+                        <span class="specialty-tag">Cilindros</span>
+                    </div>
+                    <div class="contact-info"><i class="fas fa-phone"></i> (555) 345-6789</div>
+                </div>
+
+                <div class="proveedor-card">
+                    <div class="proveedor-logo" style="background: linear-gradient(135deg, #1976D2, #0D47A1);">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="proveedor-name">Bosch Rexroth</h3>
+                    <p class="proveedor-description">Tecnología de accionamiento y control de precisión</p>
+                    <div>
+                        <span class="specialty-tag">Servo Válvulas</span>
+                        <span class="specialty-tag">Proporcionales</span>
+                        <span class="specialty-tag">Control</span>
+                    </div>
+                    <div class="contact-info"><i class="fas fa-phone"></i> (555) 456-7890</div>
+                </div>
+
+                <div class="proveedor-card">
+                    <div class="proveedor-logo" style="background: linear-gradient(135deg, #00BCD4, #0097A7);">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                    <h3 class="proveedor-name">HYDAC Technology</h3>
+                    <p class="proveedor-description">Especialista en filtración y acumuladores</p>
+                    <div>
+                        <span class="specialty-tag">Filtros</span>
+                        <span class="specialty-tag">Acumuladores</span>
+                        <span class="specialty-tag">Enfriadores</span>
+                    </div>
+                    <div class="contact-info"><i class="fas fa-phone"></i> (555) 678-9012</div>
+                </div>
+
+                <div class="proveedor-card">
+                    <div class="proveedor-logo" style="background: linear-gradient(135deg, #607D8B, #37474F);">
+                        <i class="fas fa-compress-arrows-alt"></i>
+                    </div>
+                    <h3 class="proveedor-name">SMC Pneumatics</h3>
+                    <p class="proveedor-description">Automatización neumática e hidráulica</p>
+                    <div>
+                        <span class="specialty-tag">Cilindros</span>
+                        <span class="specialty-tag">Válvulas</span>
+                        <span class="specialty-tag">Actuadores</span>
+                    </div>
+                    <div class="contact-info"><i class="fas fa-phone"></i> (555) 789-0123</div>
+                </div>
+            </div>
+
+            <button class="add-btn" onclick="alert('Agregar nuevo proveedor')">
+                <i class="fas fa-plus"></i>
+            </button>
+        </main>
+    </div>
+
+    <script>
+        // Search functionality
+        document.querySelector('.search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            document.querySelectorAll('.proveedor-card').forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        // Mobile menu
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Mobile menu button for small screens
+        if (window.innerWidth <= 768) {
+            const mobileBtn = document.createElement('button');
+            mobileBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            mobileBtn.style.cssText = 'position:fixed;top:1rem;left:1rem;z-index:200;width:48px;height:48px;background:white;border:1px solid #e2e8f0;border-radius:12px;cursor:pointer;';
+            mobileBtn.onclick = toggleSidebar;
+            document.body.appendChild(mobileBtn);
+        }
+    </script>
+</body>
+</html>
