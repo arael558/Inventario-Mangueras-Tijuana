@@ -936,17 +936,30 @@
         .overlay.active {
             display: block;
         }
+
+                .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .logo-image {
+            max-width: 280px;
+            max-height: 200px;
+            object-fit: contain;
+            margin-top: -30px;
+        }
     </style>
 </head>
 <body>
     <div class="dashboard">
         <aside class="sidebar" id="sidebar">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-cube"></i>
-                </div>
-                <div class="logo-text">StockPro</div>
-            </div>
+        <div class="logo">
+            <img src="Logo.png" alt="Logo" class="logo-image">
+        </div>
             
             <nav class="sidebar-nav">
                 <ul>
@@ -954,10 +967,10 @@
                         <a href="dashboard.html"><i class="fas fa-home"></i><span>Dashboard</span></a>
                     </li>
                     <li>
-                        <a href="#"><i class="fas fa-box"></i><span>Productos</span></a>
+                        <a href="Productos.html"><i class="fas fa-box"></i><span>Productos</span></a>
                     </li>
                     <li>
-                        <a href="#"><i class="fas fa-arrow-down"></i><span>Entradas</span></a>
+                        <a href="Entradas.html"><i class="fas fa-arrow-down"></i><span>Entradas</span></a>
                     </li>
                     <li>
                         <a href="salidas.html"><i class="fas fa-arrow-up"></i><span>Salidas</span></a>
@@ -966,10 +979,7 @@
                         <a href="Reportes.html"><i class="fas fa-chart-line"></i><span>Reportes</span></a>
                     </li>
                     <li>
-                        <a href="#"><i class="fas fa-users"></i><span>Proveedores</span></a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fas fa-cog"></i><span>Configuración</span></a>
+                        <a href="Proveedores.html"><i class="fas fa-users"></i><span>Proveedores</span></a>
                     </li>
                 </ul>
             </nav>
